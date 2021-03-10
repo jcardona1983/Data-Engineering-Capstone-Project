@@ -64,21 +64,21 @@ For us-cities-demographics:
 #### 3.1 Conceptual Data Model
 I chose a dimensional model in Redshift because I'm working with structured and relatively small amount of data(1.3 Millon rows). If data grows, It will not be a problem since a Redshift cluster is scalable, distributed, powerful and cost-effective. The datasets structures adapt naturally to a dimensional model.
 
-The Data model has one fact table and 7 dimensional tables.
+The Data Model has one fact table and 7 dimensional tables.
 
-1- Fact table - **student_arrivals_fact**: is filled with the *i94 immigration data*
+1- Fact table - **student_arrivals_fact**: is filled with the *i94 immigration data*.
 
-2- Dimensional tables
+2- Dimensional tables:
 - **dim_visa_type**: is filled with the *visaType.csv* dataset.
-- **dim_entry_port**: is filled with the data extracted from *I94_SAS_Labels_Descriptions.SAS*
-- **dim_airline**: is filled with the *iataCodes.xlsx* dataset
+- **dim_entry_port**: is filled with the data extracted from *I94_SAS_Labels_Descriptions.SAS*.
+- **dim_airline**: is filled with the *iataCodes.xlsx* dataset.
 - **dim_date**: is filled with the arrival_date field of *student_arrivals_fact* table.
-- **dim_country**: is filled with the data extracted from *I94_SAS_Labels_Descriptions.SAS*
-- **dim_entry_mode**: is filled with the data extracted from *I94_SAS_Labels_Descriptions.SAS*
-- **dim_destination_state**: is filled with the data extracted from *I94_SAS_Labels_Descriptions.SAS* and *us-cities-demographics.csv*
+- **dim_country**: is filled with the data extracted from *I94_SAS_Labels_Descriptions.SAS*.
+- **dim_entry_mode**: is filled with the data extracted from *I94_SAS_Labels_Descriptions.SAS*.
+- **dim_destination_state**: is filled with the data extracted from *I94_SAS_Labels_Descriptions.SAS* and *us-cities-demographics.csv*.
 
 #### 3.2 Mapping Out Data Pipelines
-Steps necessary to pipeline the data into the data model:
+Steps necessary to pipeline the data into The Data Model:
 
 * Create the staging, dimensional and fact tables.(if model doesn't exist)
 * Truncate dimensional tables.(except dim_date)
@@ -94,7 +94,7 @@ Steps necessary to pipeline the data into the data model:
 
 
 ### <span style="color:blue">Step 4: Running the ETL</span>
-#### 4.1 Creating the data model
+#### 4.1 Creating the Data Model
 
 * **Creating a Redshift Cluster(Optional)**
 `!python ./src/create_redshift_cluster.py create`
@@ -121,19 +121,19 @@ see the file: **data dictionary.xlsx**
 ### <span style="color:blue">Step 5: Project Write Up</span>
 #### 5.1 Clearly state the rationale for the choice of tools and technologies for the project.
 
-I preprocessed the data "locally" in the workspace since it was possible to do it, the amount of data processed is relatively small, it was not required to do it in the cloud. I processed the i94 immigration data using Spark because it is the largest dataset, it took half the time that in Pandas since Spark works with parallelism and partitions. I processed the rest of the data with Pandas. finally I saved all data in S3 to be easily consumed by Redshift.
+I preprocessed the data "locally" in the Workspace since it was possible to do it. The amount of data processed is relatively small; thus, it was not neccessary to do it on the cloud. I processed the I94 immigration data using Spark because it is the largest dataset. It took half the time than in Pandas since Spark works with parallelism and partitions. I processed the rest of the data with Pandas. Finally, I saved all data in S3 to be easily consumed by Redshift.
 
-I chose Redshift since it is scalable, distributed, conventional(it uses SQL), powerful and cost-effective, and because the datasets structures adapt naturally to a dimensional model. Redshift can be easily maintained, since no advanced or specialized knowledge is required to do so.
+I chose Redshift for it is scalable, distributed, conventional (it uses SQL and relational DB), powerful and cost-effective, and because the datasets structures naturally adapt to a dimensional model. Redshift can be easily maintained, since no advanced or specialized knowledge is required to do so.
 
 #### 5.2 Propose how often the data should be updated and why.
 
-For the stated purpose of the model, I beleive the data could be updated weekly given its analytical and non-operational nature.
+For the stated purpose of the model, I believe the data could be updated weekly given its analytical and non-operational nature.
 
 #### 5.3 Write a description of how you would approach the problem differently under the following scenarios:
- * **The data was increased by 100x.**: I would have preprocessed the data in the cloud since it would be difficult to do it on-premises, a powerful hardware would be required. I've always would have used S3 and Redshift, they can easily adapt to data grow.
+ * **The data was increased by 100x.**: I would have preprocessed the data on the cloud since it would be difficult to do it on-premises, a powerful hardware would be required. I've always would have used S3 and Redshift, they can easily adapt to data grow.
  * **The data populates a dashboard that must be updated on a daily basis by 7am every day.**: 
   I would have used a tool like Apache Airflow to schedule and run the data pipelines. 
- * **The database needed to be accessed by 100+ people.**: In Redshift Cluster, Node type and the number of nodes can be adjusted as needed to handle the demand.
+ * **The database needed to be accessed by 100+ people.**: In Redshift Cluster, Node type and the number of nodes can be adjusted as needed to handle the user demand.
 
 
 # Project files
